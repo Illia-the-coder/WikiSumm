@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wikipedia Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- ccs code in flask link  -->
+    <link type="text/css" rel="stylesheet"   href="{{ url_for('static', filename='stylesheets/style.css') }}" />
+    
+    
+  </head>
+  <body>
+    <h1>Wikipedia Search</h1>
+    <form method="POST" action="/">
+        <input type="text" name="query" placeholder="Search Wikipedia">
+        <select name="language">
+          <optgroup label="Popular Languages">
+            <option value="uk">Українська</option>
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+          </optgroup>
+          <optgroup label="Other Languages">
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+            <option value="nl">Nederlands</option>
+            <option value="sv">Svenska</option>
+            <option value="pl">Polski</option>
+            <option value="zh">中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="tr">Türkçe</option>
+            <option value="da">Dansk</option>
+            <option value="no">Norsk</option>
+            <option value="fi">Suomi</option>
+            <option value="he">עברית</option>
+            <option value="ar">العربية</option>
+            <option value="cs">Čeština</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="ro">Română</option>
+          </optgroup>
+        </select>
+        <input type="submit" value="Search" id = "Search">
+      </form>
+    {% if result %}
+      <h2>Summary:</h2>
+      <pre id="result"></pre>
+      <script>
+        const result = document.getElementById("result");
+        // {{result }} as markdown
+        const text = `{{ result | safe}}`;
+        let index = 0;
+
+        function typeWriter() {
+          if (index < text.length) {
+            result.innerHTML += text.charAt(index);
+            index++;
+            setTimeout(typeWriter, 25); // Adjust the typing speed here (lower value = faster typing)
+          }
+        }
+
+        typeWriter();
+      </script>
+    {% endif %}
+
+    {% if related_pages %}
+      <h2>Related Pages:</h2>
+      <div class="related-pages-container">
+        {% for page in related_pages %}
+          <div class="related-page">
+            <a href="{{page[1]}}">{{page[0]}}</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </body>
+</html>
